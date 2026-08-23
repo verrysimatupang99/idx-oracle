@@ -1,5 +1,13 @@
 # idx-oracle 🔮
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-informational)](https://www.python.org/)
+[![LightGBM](https://img.shields.io/badge/model-LightGBM-yellow)](https://lightgbm.readthedocs.io/)
+[![Walk-Forward](https://img.shields.io/badge/eval-walk--forward%20%2B%20embargo-success)]()
+[![Assets](https://img.shields.io/badge/markets-21%20global-ff69b4)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)]()
+
+
 Open-source market direction research toolkit — **multi-asset, 10-35+ years of data, honest walk-forward evaluation.**
 
 > "Prediction is very difficult, especially about the future." — build the measurement first, the oracle second.
