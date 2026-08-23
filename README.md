@@ -63,6 +63,13 @@ python src/train.py
 | v1 | LightGBM single (`baseline_lgbm.csv`) | **13/19** | **0.437** |
 | v2 | Ensemble+Regime routing (`baseline_v2.csv`) | 9/19 | 0.360 |
 | v3 | Meta-selection, rolling tracker (`baseline_v3_meta.csv`) | 11/19 | 0.410 |
+| v4 | Multi-seed + flow-imbalance feats + cost-aware gate (`baseline_v4.csv`) | **14/19** (static) / 11/19 (gated) | 0.433 static / 0.383 gated |
+
+v4 notes (paper-informed, see `docs/paper-digests` upstream):
+- 3-seed ensembling: seed dispersion is small (avg p_std ~0.03) — results are stable across seeds
+- CVaR 5% now reported: strategies cut tail risk vs B&H (-0.029 vs -0.039 avg daily)
+- Cost-aware act-or-hold gate cuts turnover ~15% and improves CVaR on **19/19 symbols**,
+  but trades some mean Sharpe — the classic risk/return trade-off, now measurable
 
 Highlights:
 - **IDX Composite is the most predictable market in the set** — meta sharpe **1.06**

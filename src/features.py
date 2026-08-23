@@ -60,6 +60,18 @@ def make_features(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     feats["vol_z"] = vz.replace([np.inf, -np.inf], np.nan)
     feats["obv_slope_10"] = (np.sign(r1) * v).cumsum().diff(10) / v.rolling(10).mean().clip(lower=1)
 
+    # V4-2: signed flow-imbalance features (coarse OHLCV proxies) [arXiv 2608.07690-A]
+    # All strictly backward-looking (rolling on past bars only) — no lookahead.
+    up_vol = v.where(r1 > 0, 0.0).rolling(21).sum()
+    dn_vol = v.where(r1 < 0, 0.0).rolling(21).sum()
+    feats["flow_imb_21"] = ((up_vol - dn_vol) / (up_vol + dn_vol)).replace([np.inf, -np.inf], np.nan)
+    clv = ((c - l) - (h - c)) / (h - l).replace(0, np.nan)          # close location value ∈ [-1,1]
+    feats["clv_ma_10"] = clv.rolling(10).mean()
+    feats["clv_vol_weighted_21"] = (clv * v).rolling(21).mean() / v.rolling(21).mean().clip(lower=1)
+    signed_vol = np.sign(r1) * v
+    tot = v.rolling(63).sum().clip(lower=1)
+    feats["signed_vol_ratio_63"] = signed_vol.rolling(63).sum() / tot
+
     idx = feats.index
     dow = idx.dayofweek.astype(float); mon = idx.month.astype(float)
     feats["dow_sin"] = np.sin(2 * np.pi * dow / 7); feats["dow_cos"] = np.cos(2 * np.pi * dow / 7)
