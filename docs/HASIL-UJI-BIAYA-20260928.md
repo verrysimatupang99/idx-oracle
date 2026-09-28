@@ -51,3 +51,36 @@ cukup besar untuk biaya retail.**
 - Bukan berarti modelnya buruk. Akurasinya 51–54% konsisten, di atas acak.
 - Bukan berarti pasar efisien sempurna. Edge ada, hanya lebih kecil dari biaya.
 - Bukan berarti harus berhenti. Berarti **jangan pakai frekuensi harian dengan biaya retail**.
+
+---
+
+## Hasil uji horizon (dijalankan, bukan hipotesis lagi)
+
+`src/horizon_test.py` — 4 horizon × 18 simbol = 72 lintasan walk-forward:
+
+| Horizon | Transisi/thn | Return/thn | Sharpe | Impas bps/sisi |
+|---|---|---|---|---|
+| 1 hari | 69 | 8,5% | 0,50 | 6,2 |
+| 3 hari | 53 | 5,9% | 0,37 | 5,5 |
+| 5 hari | 45 | 4,0% | 0,28 | 4,5 |
+| **10 hari** | 35 | 5,7% | 0,33 | **8,0** |
+
+**Horizon 10 hari terbaik (8,0 bps/sisi) tapi tetap ~2× di bawah batas retail terendah
+(15 bps).** Hipotesis "horizon lebih panjang menolong" **tidak terbukti cukup** — arahnya
+benar (impas naik dari 6,2 ke 8,0) tapi besarnya tidak cukup.
+
+## Kesimpulan: semua jalan sudah diuji
+
+| Jalan | Hasil |
+|---|---|
+| Menaikkan ambang keyakinan (0,55→0,80) | impas tetap 5–6 bps |
+| Memperpanjang horizon (1→10 hari) | impas maksimum 8 bps |
+| **Belum diuji: sisi maker** | secara definisi biaya 0–1 bps |
+
+Edge idx-oracle **nyata** — 15/18 simbol mengalahkan buy & hold, akurasi 51–54% konsisten.
+Tapi ukurannya **6–8 bps per sisi**, sementara biaya retail **15–30 bps per sisi**.
+Selisihnya 2–5×, dan tidak ada kombinasi parameter yang menutupnya.
+
+**Satu-satunya jalan yang belum diuji adalah sisi maker** (limit order, biaya ~0–1 bps).
+Itu kandidat berikutnya, tapi ia mengubah sifat strategi: limit order tidak selalu terisi,
+dan biaya tidak-terisi itu harus diukur, bukan diasumsikan.
